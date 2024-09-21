@@ -54,6 +54,20 @@ module "firefly_azure_integration_id_1" {
   tags                = var.tags
   eventdriven         = true
 }
+output "sp_firefly_client_id" {
+  value = module.firefly_azure_integration_id_1.sp_firefly_client_id
+}
+output "sp_firefly_client_secret" {
+  value = nonsensitive(module.firefly_azure_integration_id_1.sp_firefly_client_secret)
+}
+output "firefly_tenant_id" {
+  value = module.firefly_azure_integration_id_1.firefly_tenant_id
+}
+output "firefly_subscription_id" {
+  value = module.firefly_azure_integration_id_1.firefly_subscription_id
+}
+
+
 module "firefly_azure_integration_id_2" {
   source              = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.0.0"
   client_id           = var.client_id
@@ -65,5 +79,17 @@ module "firefly_azure_integration_id_2" {
   suffix              = "-suffix"
   tags                = var.tags
   eventdriven         = true
+}
+output "sp_firefly_client_id" {
+  value = module.firefly_azure_integration_id_2.sp_firefly_client_id
+}
+output "sp_firefly_client_secret" {
+  value = nonsensitive(module.firefly_azure_integration_id_2.sp_firefly_client_secret)
+}
+output "firefly_tenant_id" {
+  value = module.firefly_azure_integration_id_2.firefly_tenant_id
+}
+output "firefly_subscription_id" {
+  value = module.firefly_azure_integration_id_2.firefly_subscription_id
 }
 ```
