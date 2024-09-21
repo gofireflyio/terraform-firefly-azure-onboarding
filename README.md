@@ -1,5 +1,4 @@
 # Firefly Azure Subscription Integration
-# ![Firefly Logo](firefly.gif)
 
 ### Prerequisites
 
