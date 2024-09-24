@@ -14,7 +14,7 @@ variable "trigger_integrations" {
 }
 
 variable "iac_auto_discovery_disabled" {
-  type = bool
+  type    = bool
   default = true
 }
 
