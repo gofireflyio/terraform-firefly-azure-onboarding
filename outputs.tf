@@ -1,5 +1,5 @@
 output "filtered_subscriptions" {
-  value = local.kv_filtered_subscriptions
+  value = var.eventdriven_auto_discover ? local.kv_filtered_subscriptions : {}
 }
 
 output "firefly_service_principal_id" {
