@@ -1,12 +1,12 @@
 resource "azurerm_resource_group" "current" {
-  count    = var.eventdriven ? 1 : 0
+  count    = var.eventdriven_enabled ? 1 : 0
   location = var.location
   name     = "${var.prefix}firefly${var.suffix}"
   tags     = local.tags
 }
 
 resource "azurerm_storage_account" "current" {
-  count                            = var.eventdriven ? 1 : 0
+  count                            = var.eventdriven_enabled ? 1 : 0
   account_replication_type         = "LRS"
   cross_tenant_replication_enabled = false
   account_tier                     = "Standard"
@@ -16,23 +16,8 @@ resource "azurerm_storage_account" "current" {
   tags                             = local.tags
 }
 
-resource "azurerm_resource_provider_registration" "current" {
-  count = var.create_resource_provider_registration && var.eventdriven ? 1 : 0
-  name  = "microsoft.insights"
-}
-
-resource "azurerm_monitor_diagnostic_setting" "current" {
-  count              = var.eventdriven ? 1 : 0
-  name               = "${var.prefix}firefly${var.suffix}"
-  target_resource_id = "/subscriptions/${var.subscription_id}"
-  storage_account_id = azurerm_storage_account.current[0].id
-  enabled_log {
-    category = "Administrative"
-  }
-}
-
 resource "azurerm_eventgrid_system_topic" "current" {
-  count                  = var.eventdriven ? 1 : 0
+  count                  = var.eventdriven_enabled ? 1 : 0
   name                   = "${var.prefix}firefly${var.suffix}"
   location               = var.location
   resource_group_name    = azurerm_resource_group.current[0].name
@@ -42,7 +27,7 @@ resource "azurerm_eventgrid_system_topic" "current" {
 }
 
 resource "azurerm_eventgrid_system_topic_event_subscription" "current" {
-  count                = var.eventdriven ? 1 : 0
+  count                = var.eventdriven_enabled ? 1 : 0
   name                 = "${var.prefix}firefly${var.suffix}"
   resource_group_name  = azurerm_resource_group.current[0].name
   system_topic         = azurerm_eventgrid_system_topic.current[0].name
@@ -57,4 +42,53 @@ resource "azurerm_eventgrid_system_topic_event_subscription" "current" {
     event_time_to_live    = 1440
     max_delivery_attempts = 30
   }
+}
+
+resource "azurerm_role_definition" "FireflyStorageAccountBlobReader" {
+  name        = "${var.prefix}FireflyStorageAccountBlobReader-${var.subscription_id}${var.suffix}"
+  scope       = "/subscriptions/${var.subscription_id}"
+  description = "Firefly's requested permissions"
+
+  permissions {
+    data_actions = [
+      "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read"
+    ]
+  }
+  assignable_scopes = [
+    "/subscriptions/${var.subscription_id}"
+  ]
+}
+
+resource "azurerm_role_assignment" "FireflyStorageAccountBlobReader" {
+  principal_id         = azuread_service_principal.current.id
+  role_definition_name = azurerm_role_definition.FireflyStorageAccountBlobReader.name
+  scope                = "/subscriptions/${var.subscription_id}"
+  condition_version    = "2.0"
+  condition            = <<-EOT
+(
+	(
+		!(ActionMatches{'Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read'} AND NOT
+	SubOperationMatches{'Blob.List'})
+	)
+OR
+	(
+		@Resource[Microsoft.Storage/storageAccounts/blobServices/containers/blobs:path] StringLike '*state'
+	)
+OR
+	(
+		@Resource[Microsoft.Storage/storageAccounts/blobServices/containers/blobs:path] StringLike '*.tfstateenv:*'
+	)
+)
+EOT
+}
+
+resource "azurerm_monitor_diagnostic_setting" "current" {
+  for_each           = local.kv_filtered_subscriptions
+  name               = "${var.prefix}firefly${each.key}${var.suffix}"
+  target_resource_id = "/subscriptions/${each.key}"
+  storage_account_id = azurerm_storage_account.current[0].id
+  enabled_log {
+    category = "Administrative"
+  }
+  depends_on = [azurerm_storage_account.current[0]]
 }
