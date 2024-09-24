@@ -17,7 +17,7 @@ locals {
 module "firefly_integrate" {
   for_each         = local.kv_filtered_subscriptions
   firefly_endpoint = "https://api-eu.stag.firefly.ai/api"
-  source           = "../modules/firefly_azure_integration"
+  source           = "./modules/firefly_azure_integration"
   #firefly_token = local.token
   firefly_token               = local.token
   subscription_id             = each.key
