@@ -7,6 +7,14 @@ All notable changes to this project will be documented in this file.
 
 ### Features
 
+* bump ([d42e88e](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/commit/d42e88e258b1a0deb18016a4e77c6ece58047dd4))
+* bump version ([8319369](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/commit/831936930df8c222da4fc9593ac28dd81c08dc07))
+
+## [1.1.0](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/compare/v1.0.0...v1.1.0) (2024-09-24)
+
+
+### Features
+
 * bump version ([8319369](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/commit/831936930df8c222da4fc9593ac28dd81c08dc07))
 
 ## 1.0.0 (2024-09-21)
