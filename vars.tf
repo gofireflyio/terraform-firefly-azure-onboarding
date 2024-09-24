@@ -3,6 +3,35 @@ variable "location" {
   default = "eastus"
 }
 
+variable "firefly_endpoint" {
+  type        = string
+  default     = "https://prodapi.firefly.io/api"
+}
+
+
+variable "trigger_integrations" {
+  type = bool
+  default = true
+}
+
+variable "firefly_access_key" {
+  type        = string
+  description = "Your authentication access_key"
+  validation {
+    condition     = var.firefly_access_key != ""
+    error_message = "Variable \"firefly_access_key\" cannot be empty."
+  }
+}
+
+variable "firefly_secret_key" {
+  type        = string
+  description = "Your authentication secret_key"
+  validation {
+    condition     = var.firefly_secret_key != ""
+    error_message = "Variable \"firefly_secret_key\" cannot be empty."
+  }
+}
+
 variable "prefix" {
   type    = string
   default = ""
@@ -13,7 +42,7 @@ variable "suffix" {
   default = ""
 }
 
-variable "eventdriven" {
+variable "eventdriven_enabled" {
   type    = bool
   default = true
 }
@@ -40,6 +69,13 @@ variable "firefly_webhook_url" {
 variable "subscription_id" {
   type = string
 }
+
+variable "management_group_id" {
+  type    = string
+  default = ""
+}
+
+variable "eventdriven_auto_discover" {}
 
 variable "client_id" {
   type = string
