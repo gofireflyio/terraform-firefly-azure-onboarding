@@ -1,5 +1,5 @@
 data "http" "firefly_login" {
-  count = var.firefly_secret_key != "" ? 1 : 0
+  count  = var.firefly_secret_key != "" ? 1 : 0
   url    = "${var.firefly_endpoint}/account/access_keys/login"
   method = "POST"
   request_headers = {
@@ -15,17 +15,16 @@ locals {
 
 // Multi
 module "firefly_integrate" {
-  for_each         = local.kv_filtered_subscriptions
-  firefly_endpoint = "https://api-eu.stag.firefly.ai/api"
-  source           = "./modules/firefly_azure_integration"
-  #firefly_token = local.token
+  for_each                    = var.trigger_integrations ? local.kv_filtered_subscriptions : {}
+  firefly_endpoint            = var.firefly_endpoint
+  source                      = "./modules/firefly_azure_integration"
   firefly_token               = local.token
   subscription_id             = each.key
   subscription_name           = each.value
   tenant_id                   = var.tenant_id
   application_id              = azuread_service_principal.current.client_id
   client_secret               = azuread_service_principal_password.current.value
-  directory_domain            = "firefly"
+  directory_domain            = var.directory_domain
   eventdriven_enabled         = var.eventdriven_enabled
-  iac_auto_discovery_disabled = true
+  iac_auto_discovery_disabled = var.iac_auto_discovery_disabled
 }

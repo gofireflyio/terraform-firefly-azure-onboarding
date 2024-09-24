@@ -45,6 +45,7 @@ resource "azurerm_eventgrid_system_topic_event_subscription" "current" {
 }
 
 resource "azurerm_role_definition" "FireflyStorageAccountBlobReader" {
+  count       = var.eventdriven_enabled ? 1 : 0
   name        = "${var.prefix}FireflyStorageAccountBlobReader-${var.subscription_id}${var.suffix}"
   scope       = "/subscriptions/${var.subscription_id}"
   description = "Firefly's requested permissions"
@@ -60,6 +61,7 @@ resource "azurerm_role_definition" "FireflyStorageAccountBlobReader" {
 }
 
 resource "azurerm_role_assignment" "FireflyStorageAccountBlobReader" {
+  count                = var.eventdriven_enabled ? 1 : 0
   principal_id         = azuread_service_principal.current.id
   role_definition_name = azurerm_role_definition.FireflyStorageAccountBlobReader.name
   scope                = "/subscriptions/${var.subscription_id}"
@@ -83,7 +85,7 @@ EOT
 }
 
 resource "azurerm_monitor_diagnostic_setting" "current" {
-  for_each           = local.kv_filtered_subscriptions
+  for_each           = var.eventdriven_enabled ? local.kv_filtered_subscriptions : {}
   name               = "${var.prefix}firefly${each.key}${var.suffix}"
   target_resource_id = "/subscriptions/${each.key}"
   storage_account_id = azurerm_storage_account.current[0].id

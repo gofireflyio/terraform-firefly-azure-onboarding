@@ -4,7 +4,7 @@ variable "subscription_name" {
 }
 
 variable "firefly_token" {
-  type = string
+  type        = string
   description = "Token returned as result of login request, if provided firefly_access_key and firefly_secret_key are ignored"
 }
 
@@ -17,7 +17,7 @@ variable "subscription_id" {
 variable "firefly_endpoint" {
   type        = string
   description = "The Firefly endpoint to register account management"
-  default = "https://prodapi.gofirefly.io/api"
+  default     = "https://prodapi.gofirefly.io/api"
 }
 
 variable "is_prod" {
@@ -43,11 +43,11 @@ variable "directory_domain" {
 }
 
 variable "eventdriven_enabled" {
-  type = bool
+  type    = bool
   default = true
 }
 
 variable "iac_auto_discovery_disabled" {
-  type = bool
+  type    = bool
   default = false
 }

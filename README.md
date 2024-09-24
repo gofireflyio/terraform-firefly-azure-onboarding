@@ -39,11 +39,48 @@ client_secret   = ""
 tenant_id       = ""
 subscription_id = ""
 ```
-### Installation
+### Installation Discovered Subscriptions
+
+```hcl-terraform
+
+module "firefly_azure_integration" {
+  source = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
+
+  client_id     = var.client_id
+  client_secret = var.client_secret
+
+  tenant_id = var.tenant_id
+  // firefly's landing subscription: eventgrid, storage_account and resource_group will be created here
+  subscription_id = var.subscription_id
+
+  // firefly credentials
+  firefly_access_key = var.firefly_access_key
+  firefly_secret_key = var.firefly_secret_key
+
+  // custom settings
+  location = var.location
+  prefix   = var.prefix
+  tags     = var.tags
+
+  // create resource provider registration
+  create_resource_provider_registration = false
+
+  // enablew on all subscriptions that can be discovered
+  eventdriven_auto_discover = true
+  // enable eventdriven on subscription_id that was given
+  eventdriven_enabled = true
+
+  // create integrations
+  trigger_integrations = true
+}
+
+```
+
+### Installation Single Subscription
 
 ```hcl-terraform
 module "firefly_azure_integration_00000000-0000-0000-0000-000000000000" {
-  source              = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.0.0"
+  source              = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
   client_id           = var.client_id
   client_secret       = var.client_secret
   tenant_id           = var.tenant_id
@@ -69,7 +106,7 @@ output "firefly_subscription_id_00000000-0000-0000-0000-000000000000" {
 
 
 module "firefly_azure_integration_11111111-1111-1111-1111-111111111111" {
-  source              = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.0.0"
+  source              = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
   client_id           = var.client_id
   client_secret       = var.client_secret
   tenant_id           = var.tenant_id

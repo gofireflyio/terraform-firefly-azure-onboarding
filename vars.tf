@@ -1,15 +1,19 @@
-variable "location" {
-  type    = string
-  default = "eastus"
-}
-
 variable "firefly_endpoint" {
-  type        = string
-  default     = "https://prodapi.firefly.io/api"
+  type    = string
+  default = "https://prodapi.firefly.io/api"
 }
 
+variable "firefly_webhook_url" {
+  type    = string
+  default = "https://azureevents.gofirefly.io"
+}
 
 variable "trigger_integrations" {
+  type    = bool
+  default = true
+}
+
+variable "iac_auto_discovery_disabled" {
   type = bool
   default = true
 }
@@ -31,6 +35,16 @@ variable "firefly_secret_key" {
     error_message = "Variable \"firefly_secret_key\" cannot be empty."
   }
 }
+
+variable "directory_domain" {
+  type = string
+}
+
+variable "location" {
+  type    = string
+  default = "eastus"
+}
+
 
 variable "prefix" {
   type    = string
@@ -59,11 +73,6 @@ variable "create_resource_provider_registration" {
 
 variable "tenant_id" {
   type = string
-}
-
-variable "firefly_webhook_url" {
-  type    = string
-  default = "https://azureevents.gofirefly.io"
 }
 
 variable "subscription_id" {
