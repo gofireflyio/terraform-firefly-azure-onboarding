@@ -5,7 +5,7 @@ variable "firefly_endpoint" {
 
 variable "firefly_webhook_url" {
   type    = string
-  default = "https://azureevents.gofirefly.io"
+  default = "https://azure-events.firefly.ai"
 }
 
 variable "trigger_integrations" {
@@ -52,6 +52,21 @@ variable "prefix" {
 }
 
 variable "suffix" {
+  type    = string
+  default = ""
+}
+
+variable "existing_eventgrid_topic_name" {
+  type    = string
+  default = ""
+}
+
+variable "existing_resource_group_name" {
+  type    = string
+  default = ""
+}
+
+variable "existing_storage_account_id" {
   type    = string
   default = ""
 }

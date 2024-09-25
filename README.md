@@ -39,20 +39,21 @@ client_secret   = ""
 tenant_id       = ""
 subscription_id = ""
 ```
-### Installation Discovered Subscriptions
+### Installation with Discovered Subscriptions
 
 ```hcl-terraform
 
-module "firefly_azure_integration" {
+module "firefly_azure" {
   source = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
-
+  // get credentials from vault
   client_id     = var.client_id
   client_secret = var.client_secret
 
+  directory_domain = "organization.com"
   tenant_id = var.tenant_id
   // firefly's landing subscription: eventgrid, storage_account and resource_group will be created here
   subscription_id = var.subscription_id
-
+  
   // firefly credentials
   firefly_access_key = var.firefly_access_key
   firefly_secret_key = var.firefly_secret_key
@@ -71,62 +72,78 @@ module "firefly_azure_integration" {
   eventdriven_enabled = true
 
   // create integrations
-  trigger_integrations = true
+  trigger_integrations = false
 }
 
 ```
 
-### Installation Single Subscription
+### Installation with Single/Selected Subscription
 
 ```hcl-terraform
-module "firefly_azure_integration_00000000-0000-0000-0000-000000000000" {
-  source              = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
-  client_id           = var.client_id
-  client_secret       = var.client_secret
-  tenant_id           = var.tenant_id
-  subscription_id     = "00000000-0000-0000-0000-000000000000"
-  location            = var.location
-  prefix              = "prefix-"
-  suffix              = "-suffix"
-  tags                = var.tags
-  eventdriven         = true
-}
-output "sp_firefly_client_id_00000000-0000-0000-0000-000000000000" {
-  value = module.firefly_azure_integration_00000000-0000-0000-0000-000000000000.sp_firefly_client_id
-}
-output "sp_firefly_client_secret_00000000-0000-0000-0000-000000000000" {
-  value = nonsensitive(module.firefly_azure_integration_00000000-0000-0000-0000-000000000000.sp_firefly_client_secret)
-}
-output "firefly_tenant_id_id_00000000-0000-0000-0000-000000000000" {
-  value = module.firefly_azure_integration_00000000-0000-0000-0000-000000000000.firefly_tenant_id
-}
-output "firefly_subscription_id_00000000-0000-0000-0000-000000000000" {
-  value = module.firefly_azure_integration_00000000-0000-0000-0000-000000000000.firefly_subscription_id
+module "firefly_azure_00000000-0000-0000-0000-000000000000" {
+  source = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
+  client_id     = var.client_id
+  client_secret = var.client_secret
+
+  directory_domain = "organization.com"
+  tenant_id = var.tenant_id
+  // firefly's landing subscription: eventgrid, storage_account and resource_group will be created here
+  subscription_id = "00000000-0000-0000-0000-000000000000"
+  
+  // firefly credentials
+  firefly_access_key = var.firefly_access_key
+  firefly_secret_key = var.firefly_secret_key
+
+  // custom settings
+  location = var.location
+  prefix   = var.prefix
+  tags     = var.tags
+
+  // create resource provider registration
+  create_resource_provider_registration = false
+
+  // enable on all subscriptions that can be discovered
+  eventdriven_auto_discover = false
+  // enable eventdriven on subscription_id that was given
+  eventdriven_enabled = true
+
+  // trigger integrations
+  trigger_integrations = false
 }
 
+module "firefly_azure_10000000-0000-0000-0000-000000000000" {
+  source = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
+  client_id     = var.client_id
+  client_secret = var.client_secret
 
-module "firefly_azure_integration_11111111-1111-1111-1111-111111111111" {
-  source              = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
-  client_id           = var.client_id
-  client_secret       = var.client_secret
-  tenant_id           = var.tenant_id
-  subscription_id     = "11111111-1111-1111-1111-111111111111"
-  location            = var.location
-  prefix              = "prefix-"
-  suffix              = "-suffix"
-  tags                = var.tags
-  eventdriven         = true
-}
-output "sp_firefly_client_id_11111111-1111-1111-1111-111111111111" {
-  value = module.firefly_azure_integration_11111111-1111-1111-1111-1111111111110.sp_firefly_client_id
-}
-output "sp_firefly_client_secret_11111111-1111-1111-1111-111111111111" {
-  value = nonsensitive(module.firefly_azure_integration_11111111-1111-1111-1111-111111111111.sp_firefly_client_secret)
-}
-output "firefly_tenant_id_id_11111111-1111-1111-1111-111111111111" {
-  value = module.firefly_azure_integration_11111111-1111-1111-1111-111111111111.firefly_tenant_id
-}
-output "firefly_subscription_id_11111111-1111-1111-1111-111111111111" {
-  value = module.firefly_azure_integration_11111111-1111-1111-1111-111111111111.firefly_subscription_id
+  directory_domain = "organization.com"
+  tenant_id = var.tenant_id
+  // firefly's landing subscription: eventgrid, storage_account and resource_group will be created here
+  subscription_id = "10000000-0000-0000-0000-000000000000"
+  
+  // firefly credentials
+  firefly_access_key = var.firefly_access_key
+  firefly_secret_key = var.firefly_secret_key
+
+  // custom settings
+  location = var.location
+  prefix   = var.prefix
+  tags     = var.tags
+
+  // create resource provider registration
+  create_resource_provider_registration = false
+
+  // enable on all subscriptions that can be discovered
+  eventdriven_auto_discover = false
+  // enable eventdriven on subscription_id that was given
+  eventdriven_enabled = true
+
+  // additional subscriptions require already created resources
+  existing_resource_group_name = module.firefly_azure_00000000-0000-0000-0000-000000000000.firefly_resource_group_name
+  existing_storage_account_id = module.firefly_azure_00000000-0000-0000-0000-000000000000.firefly_storage_account_id
+  existing_eventgrid_topic_name = module.firefly_azure_00000000-0000-0000-0000-000000000000.firefly_eventgrid_system_topic_name
+
+  // trigger integrations
+  trigger_integrations = false
 }
 ```
