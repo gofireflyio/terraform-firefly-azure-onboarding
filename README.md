@@ -1,10 +1,37 @@
-# Firefly Azure Subscription Integration
+# Firefly Azure Integration
 
-### Prerequisites
+![Firefly Logo](firefly.gif)
 
-```
-required providers
-------------------------------------
+This repository contains Terraform modules for integrating Firefly with Azure subscriptions. It allows you to set up the necessary resources and permissions for Firefly to monitor and manage your Azure environment.
+
+## Table of Contents
+
+- [Firefly Azure Integration](#firefly-azure-integration)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Required Providers](#required-providers)
+  - [Installation](#installation)
+    - [Option 1: Discovered Subscriptions](#option-1-discovered-subscriptions)
+    - [Option 2: Single/Selected Subscription](#option-2-singleselected-subscription)
+  - [Required Resources](#required-resources)
+  - [Configuration Variables](#configuration-variables)
+  - [Contributing](#contributing)
+  - [Support](#support)
+
+## Prerequisites
+
+Before you begin, ensure you have the following:
+
+1. Terraform installed on your local machine
+2. Azure CLI installed and configured
+3. Necessary Azure credentials (see [Configuration Variables](#configuration-variables))
+4. Firefly access and secret keys
+
+## Required Providers
+
+This module requires the following Terraform providers. Add this block to your Terraform configuration:
+
+```hcl
 terraform {
   required_providers {
     azurerm = {
@@ -17,133 +44,128 @@ terraform {
     }
   }
 }
-
-resources to be created
-------------------------------------
-azuread_application_registration
-azuread_service_principal
-azuread_service_principal_delegated_permission_grant
-azurerm_eventgrid_system_topic
-azurerm_eventgrid_system_topic_event_subscription
-azurerm_monitor_diagnostic_setting
-azurerm_resource_group
-azurerm_resource_provider_registration
-azurerm_role_assignment
-azurerm_role_definition
-azurerm_storage_account
-
-credentials for the above resources
-------------------------------------
-client_id       = ""
-client_secret   = ""
-tenant_id       = ""
-subscription_id = ""
 ```
-### Installation with Discovered Subscriptions
 
-```hcl-terraform
+Make sure to include this provider configuration in your Terraform files before using the Firefly Azure module.
 
+## Installation
+
+Choose one of the following installation options based on your needs:
+
+### Option 1: Discovered Subscriptions
+
+Use this option if you want Firefly to automatically discover and monitor all accessible Azure subscriptions.
+
+```hcl
 module "firefly_azure" {
-  source = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
-  // get credentials from vault
-  client_id     = var.client_id
-  client_secret = var.client_secret
-
-  directory_domain = "organization.com"
-  tenant_id = var.tenant_id
-  // firefly's landing subscription: eventgrid, storage_account and resource_group will be created here
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
+  
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  directory_domain = "your-organization.com"
+  tenant_id       = var.tenant_id
   subscription_id = var.subscription_id
   
-  // firefly credentials
   firefly_access_key = var.firefly_access_key
   firefly_secret_key = var.firefly_secret_key
-
-  // custom settings
+  
   location = var.location
   prefix   = var.prefix
   tags     = var.tags
-
-  // create resource provider registration
+  
   create_resource_provider_registration = false
-
-  // enablew on all subscriptions that can be discovered
   eventdriven_auto_discover = true
-  // enable eventdriven on subscription_id that was given
   eventdriven_enabled = true
-
-  // create integrations
-  trigger_integrations = false
-}
-
-```
-
-### Installation with Single/Selected Subscription
-
-```hcl-terraform
-module "firefly_azure_00000000-0000-0000-0000-000000000000" {
-  source = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
-  client_id     = var.client_id
-  client_secret = var.client_secret
-
-  directory_domain = "organization.com"
-  tenant_id = var.tenant_id
-  // firefly's landing subscription: eventgrid, storage_account and resource_group will be created here
-  subscription_id = "00000000-0000-0000-0000-000000000000"
-  
-  // firefly credentials
-  firefly_access_key = var.firefly_access_key
-  firefly_secret_key = var.firefly_secret_key
-
-  // custom settings
-  location = var.location
-  prefix   = var.prefix
-  tags     = var.tags
-
-  // create resource provider registration
-  create_resource_provider_registration = false
-
-  // enable on all subscriptions that can be discovered
-  eventdriven_auto_discover = false
-  // enable eventdriven on subscription_id that was given
-  eventdriven_enabled = true
-
-  // trigger integrations
-  trigger_integrations = false
-}
-
-module "firefly_azure_10000000-0000-0000-0000-000000000000" {
-  source = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
-  client_id     = var.client_id
-  client_secret = var.client_secret
-
-  directory_domain = "organization.com"
-  tenant_id = var.tenant_id
-  // firefly's landing subscription: eventgrid, storage_account and resource_group will be created here
-  subscription_id = "10000000-0000-0000-0000-000000000000"
-  
-  // firefly credentials
-  firefly_access_key = var.firefly_access_key
-  firefly_secret_key = var.firefly_secret_key
-
-  // custom settings
-  location = var.location
-  prefix   = var.prefix
-  tags     = var.tags
-
-  // create resource provider registration
-  create_resource_provider_registration = false
-
-  // enable on all subscriptions that can be discovered
-  eventdriven_auto_discover = false
-  // enable eventdriven on subscription_id that was given
-  eventdriven_enabled = true
-
-  // additional subscriptions require already created resources
-  existing_resource_group_name = module.firefly_azure_00000000-0000-0000-0000-000000000000.firefly_resource_group_name
-  existing_storage_account_id = module.firefly_azure_00000000-0000-0000-0000-000000000000.firefly_storage_account_id
-  existing_eventgrid_topic_name = module.firefly_azure_00000000-0000-0000-0000-000000000000.firefly_eventgrid_system_topic_name
-
-  // trigger integrations
   trigger_integrations = false
 }
 ```
+
+### Option 2: Single/Selected Subscription
+
+Use this option if you want to integrate Firefly with specific Azure subscriptions. You'll need to create a separate module for each subscription.
+
+```hcl
+module "firefly_azure_subscription_1" {
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
+  
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  directory_domain = "your-organization.com"
+  tenant_id       = var.tenant_id
+  subscription_id = "subscription-id-1"
+  
+  firefly_access_key = var.firefly_access_key
+  firefly_secret_key = var.firefly_secret_key
+  
+  location = var.location
+  prefix   = var.prefix
+  tags     = var.tags
+  
+  create_resource_provider_registration = false
+  eventdriven_auto_discover = false
+  eventdriven_enabled = true
+  trigger_integrations = false
+}
+
+# For additional subscriptions, create new modules and reference existing resources
+module "firefly_azure_subscription_2" {
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
+  
+  # ... (similar configuration as above)
+  
+  existing_resource_group_name = module.firefly_azure_subscription_1.firefly_resource_group_name
+  existing_storage_account_id = module.firefly_azure_subscription_1.firefly_storage_account_id
+  existing_eventgrid_topic_name = module.firefly_azure_subscription_1.firefly_eventgrid_system_topic_name
+}
+```
+
+## Required Resources
+
+The Terraform module will create the following Azure resources:
+
+- Azure AD Application Registration
+- Azure AD Service Principal
+- Azure AD Service Principal Delegated Permission Grant
+- Azure Event Grid System Topic
+- Azure Event Grid System Topic Event Subscription
+- Azure Monitor Diagnostic Setting
+- Azure Resource Group
+- Azure Resource Provider Registration
+- Azure Role Assignment
+- Azure Role Definition
+- Azure Storage Account
+
+## Configuration Variables
+
+| Variable | Description |
+|----------|-------------|
+| `client_id` | Azure AD Application (client) ID |
+| `client_secret` | Azure AD Application client secret |
+| `tenant_id` | Azure AD Tenant ID |
+| `subscription_id` | Azure Subscription ID |
+| `firefly_access_key` | Firefly access key |
+| `firefly_secret_key` | Firefly secret key |
+| `directory_domain` | Your organization's domain (e.g., "yourcompany.com") |
+| `location` | Azure region for resource deployment |
+| `prefix` | Prefix for resource naming |
+| `tags` | Tags to apply to created resources |
+
+Ensure you have these variables set in your Terraform configuration or provide them securely using environment variables or a `terraform.tfvars` file.
+
+For more detailed information on each variable and advanced configuration options, please refer to the module documentation.
+
+## Contributing
+
+We welcome contributions to the Firefly Azure Integration! If you have functionality that you think would be valuable to other Firefly customers, please feel free to submit a pull request.
+
+When contributing, please:
+
+1. Ensure your code is well-documented
+2. Include a README or update the existing README with usage instructions
+3. Test your code thoroughly before submitting
+
+## Support
+
+If you encounter any issues or have questions about using this repository, please open an issue on GitHub or contact Firefly support.
+
+For more information about Firefly and our services, please visit [our website](https://www.gofirefly.io/).
