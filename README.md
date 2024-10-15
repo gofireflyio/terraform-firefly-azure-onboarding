@@ -137,6 +137,8 @@ The Terraform module will create the following Azure resources:
 
 ## Configuration Variables
 
+Service principal credential used must have permissions to create a service principal, assign permission to an application and create resources on the subscription that is added to Firefly. 
+
 | Variable | Description |
 |----------|-------------|
 | `client_id` | Azure AD Application (client) ID |

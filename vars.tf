@@ -1,6 +1,6 @@
 variable "firefly_endpoint" {
   type    = string
-  default = "https://prodapi.firefly.io/api"
+  default = "https://prodapi.gofirefly.io/api"
 }
 
 variable "firefly_webhook_url" {
