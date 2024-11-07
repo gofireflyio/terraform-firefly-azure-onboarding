@@ -56,6 +56,10 @@ Choose one of the following installation options based on your needs:
 
 Use this option if you want Firefly to automatically discover and monitor all accessible Azure subscriptions.
 
+You can exclude subscriptions by adding a tag on them.
+
+```disable_firefly_discovery = "Enabled"```
+
 ```hcl
 provider "azuread" {
   client_id     = var.client_id
