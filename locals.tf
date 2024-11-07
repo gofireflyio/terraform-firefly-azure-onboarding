@@ -13,3 +13,7 @@ locals {
     "firefly" = "true"
   })
 }
+
+module "naming" {
+  source  = "Azure/naming/azurerm"
+}

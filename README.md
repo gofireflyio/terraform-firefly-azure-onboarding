@@ -57,6 +57,21 @@ Choose one of the following installation options based on your needs:
 Use this option if you want Firefly to automatically discover and monitor all accessible Azure subscriptions.
 
 ```hcl
+provider "azuread" {
+  client_id     = var.client_id
+  client_secret = var.client_secret
+  tenant_id     = var.tenant_id
+}
+
+provider "azurerm" {
+  features {}
+  client_id                       = var.client_id
+  client_secret                   = var.client_secret
+  tenant_id                       = var.tenant_id
+  subscription_id                 = var.subscription_id
+  resource_provider_registrations = "none"
+}
+
 module "firefly_azure" {
   source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
   

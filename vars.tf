@@ -109,3 +109,14 @@ variable "client_id" {
 variable "client_secret" {
   type = string
 }
+
+variable "firefly_eips" {
+  type = list(string)
+  default = [
+    "3.224.145.192",
+    "54.83.245.177",
+    "3.213.167.195",
+    "54.146.252.237",
+    "34.226.97.113"
+  ]
+}

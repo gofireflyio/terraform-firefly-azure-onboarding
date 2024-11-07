@@ -25,3 +25,7 @@ output "firefly_storage_account_id" {
 output "firefly_eventgrid_system_topic_name" {
   value = local.eventgrid_system_topic_name
 }
+
+output "firefly_eips" {
+  value = var.firefly_eips
+}

@@ -41,7 +41,7 @@ resource "azurerm_role_assignment" "SecurityReader" {
 }
 
 resource "azurerm_role_definition" "Firefly" {
-  name        = "${var.prefix}Firefly${var.suffix}"
+  name        = "${var.prefix}${module.naming.role_definition}Firefly${var.suffix}"
   scope       = local.scope
   description = "Firefly's requested permissions"
 
