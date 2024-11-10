@@ -4,7 +4,7 @@ locals {
 }
 
 resource "azuread_application_registration" "current" {
-  display_name = "${var.prefix}firefly${var.suffix}"
+  display_name = "spn-${var.prefix}firefly${var.suffix}"
 }
 
 resource "azuread_service_principal" "current" {
@@ -41,7 +41,7 @@ resource "azurerm_role_assignment" "SecurityReader" {
 }
 
 resource "azurerm_role_definition" "Firefly" {
-  name        = "${var.prefix}${module.naming.role_definition}Firefly${var.suffix}"
+  name        = "${module.naming.role_definition.name}-${var.prefix}Firefly${var.suffix}"
   scope       = local.scope
   description = "Firefly's requested permissions"
 
