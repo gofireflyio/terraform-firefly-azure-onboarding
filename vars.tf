@@ -110,6 +110,11 @@ variable "client_secret" {
   type = string
 }
 
+variable "enforce_storage_network_rules" {
+  type = bool
+  default = false
+}
+
 variable "firefly_eips" {
   type = list(string)
   default = [

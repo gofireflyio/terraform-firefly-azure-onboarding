@@ -13,6 +13,13 @@ resource "azurerm_storage_account" "current" {
   location                         = var.location
   name                             = "${module.naming.storage_account.name}${var.prefix != "" ? regex("\\w+", var.prefix) : ""}firefly${var.suffix != "" ? regex("\\w+", var.suffix) : ""}"
   resource_group_name              = local.resource_group_name
+  dynamic "network_rules" {
+    for_each = var.enforce_storage_network_rules ? [1] : []
+    content {
+      default_action = "Deny"
+      ip_rules = var.firefly_eips
+    }
+  }
   tags                             = local.tags
 }
 
