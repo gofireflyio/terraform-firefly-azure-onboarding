@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/compare/v1.1.0...v1.2.0) (2024-11-14)
+
+
+### Features
+
+* 1.2.0 - update provider blocks ([ba862ee](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/commit/ba862ee9e5cb4f703a076dca68d89ece8141350e))
+* 1.2.0 add option to enforce network_rules on storage account ([e234169](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/commit/e234169450738b1e0d4be7cee2e4231a8add6bdb))
+* bump 1.2.0 ([a30d289](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/commit/a30d2899688b5902db81397c85b05eb1bdb57ded))
+* bump 1.2.0 - fix naming module ([81f2ae5](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/commit/81f2ae53ccb776975481d8d31aebeba02ac144f1))
+
 ## [1.2.0](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/compare/v1.1.0...v1.2.0) (2024-11-12)
 
 
