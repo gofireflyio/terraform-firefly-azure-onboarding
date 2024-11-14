@@ -15,5 +15,5 @@ locals {
 }
 
 module "naming" {
-  source  = "Azure/naming/azurerm"
+  source = "Azure/naming/azurerm"
 }

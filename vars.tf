@@ -111,7 +111,7 @@ variable "client_secret" {
 }
 
 variable "enforce_storage_network_rules" {
-  type = bool
+  type    = bool
   default = false
 }
 

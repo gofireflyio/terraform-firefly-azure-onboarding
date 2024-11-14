@@ -69,6 +69,7 @@ provider "azuread" {
 
 provider "azurerm" {
   features {}
+  alias                           = "deployment_subscription"
   client_id                       = var.client_id
   client_secret                   = var.client_secret
   tenant_id                       = var.tenant_id
@@ -77,7 +78,10 @@ provider "azurerm" {
 }
 
 module "firefly_azure" {
-  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.2.0"
+  providers = {
+    azurerm.deployment_subscription = azurerm.deployment_subscription
+  }
   
   client_id       = var.client_id
   client_secret   = var.client_secret
@@ -105,7 +109,7 @@ Use this option if you want to integrate Firefly with specific Azure subscriptio
 
 ```hcl
 module "firefly_azure_subscription_1" {
-  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.2.0"
   
   client_id       = var.client_id
   client_secret   = var.client_secret
@@ -128,7 +132,7 @@ module "firefly_azure_subscription_1" {
 
 # For additional subscriptions, create new modules and reference existing resources
 module "firefly_azure_subscription_2" {
-  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.1.0"
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.2.0"
   
   # ... (similar configuration as above)
   
