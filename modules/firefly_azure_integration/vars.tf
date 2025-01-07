@@ -13,6 +13,10 @@ variable "subscription_id" {
   description = "subscription id"
 }
 
+variable "auto_discover_enabled" {
+  type = bool
+  default = true
+}
 
 variable "firefly_endpoint" {
   type        = string

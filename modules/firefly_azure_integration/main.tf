@@ -21,6 +21,7 @@ data "http" "firefly_azure_integration_request" {
       "isProd"                     = var.is_prod,
       "isEventDriven"              = var.eventdriven_enabled,
       "isIacAutoDiscoveryDisabled" = var.iac_auto_discovery_disabled
+      "isAutoDiscover"             = var.auto_discover_enabled
     }
   )
 }

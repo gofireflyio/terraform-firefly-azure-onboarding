@@ -1,8 +1,14 @@
 data "azurerm_management_group" "current" {
+  display_name = var.management_group_name != "" ? var.management_group_name : data.azurerm_management_group.tenant.display_name
+}
+
+data "azurerm_management_group" "tenant" {
   name = var.tenant_id
 }
 
+
 data "azurerm_subscriptions" "current" {}
+
 data "azuread_client_config" "current" {}
 data "azurerm_subscription" "current" {
   subscription_id = var.subscription_id

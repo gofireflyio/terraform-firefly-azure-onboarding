@@ -95,12 +95,15 @@ variable "subscription_id" {
   type = string
 }
 
-variable "management_group_id" {
+variable "management_group_name" {
   type    = string
   default = ""
 }
 
-variable "eventdriven_auto_discover" {}
+variable "auto_discover" {
+  type = bool
+  default = false
+}
 
 variable "client_id" {
   type = string
