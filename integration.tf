@@ -27,4 +27,5 @@ module "firefly_integrate" {
   directory_domain            = var.directory_domain
   eventdriven_enabled         = var.eventdriven_enabled
   iac_auto_discovery_disabled = var.iac_auto_discovery_disabled
+  auto_discover_enabled       = var.auto_discover_enabled
 }

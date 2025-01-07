@@ -100,6 +100,11 @@ variable "management_group_id" {
   default = ""
 }
 
+variable "auto_discover_enabled" {
+  type = bool
+  default = true
+}
+
 variable "eventdriven_auto_discover" {}
 
 variable "client_id" {
