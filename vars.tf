@@ -19,11 +19,6 @@ variable "iac_auto_discovery_disabled" {
   default = true
 }
 
-variable "auto_discover_enabled" {
-  type    = bool
-  default = true
-}
-
 variable "firefly_access_key" {
   type        = string
   description = "Your authentication access_key"
@@ -106,6 +101,11 @@ variable "management_group_id" {
 }
 
 variable "eventdriven_auto_discover" {}
+
+variable "auto_discover" {
+  type = bool
+  default = false
+}
 
 variable "client_id" {
   type = string
