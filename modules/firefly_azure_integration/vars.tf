@@ -47,6 +47,11 @@ variable "eventdriven_enabled" {
   default = true
 }
 
+variable "auto_discover_enabled" {
+  type    = bool
+  default = true
+}
+
 variable "iac_auto_discovery_disabled" {
   type    = bool
   default = false
