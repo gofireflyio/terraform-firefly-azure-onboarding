@@ -1,3 +1,8 @@
+locals {
+  management_group_id = var.management_group_id != "" ? "/providers/Microsoft.Management/managementGroups/${var.management_group_id}" : data.azurerm_management_group.current.id
+  scope               = var.eventdriven_auto_discover != "" ? local.management_group_id : "/subscriptions/${var.subscription_id}"
+}
+
 resource "azuread_application_registration" "current" {
   display_name = "spn-${var.prefix}firefly${var.suffix}"
 }
