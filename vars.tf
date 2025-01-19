@@ -14,11 +14,6 @@ variable "trigger_integrations" {
   default = true
 }
 
-variable "iac_auto_discovery_disabled" {
-  type    = bool
-  default = true
-}
-
 variable "firefly_access_key" {
   type        = string
   description = "Your authentication access_key"
@@ -72,11 +67,6 @@ variable "existing_storage_account_id" {
   default = ""
 }
 
-variable "eventdriven_enabled" {
-  type    = bool
-  default = true
-}
-
 variable "tags" {
   type    = map(string)
   default = {}
@@ -100,11 +90,9 @@ variable "management_group_id" {
   default = ""
 }
 
-variable "eventdriven_auto_discover" {}
-
 variable "auto_discover" {
   type = bool
-  default = false
+  default = true
 }
 
 variable "client_id" {
