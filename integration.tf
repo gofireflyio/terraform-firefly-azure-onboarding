@@ -25,5 +25,5 @@ module "firefly_integrate" {
   application_id              = azuread_service_principal.current.client_id
   client_secret               = azuread_service_principal_password.current.value
   directory_domain            = var.directory_domain
-  auto_discover_enabled       = var.auto_discover
+  auto_discover_enabled       = var.auto_discover_enabled
 }

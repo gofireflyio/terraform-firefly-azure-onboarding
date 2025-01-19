@@ -90,7 +90,7 @@ variable "management_group_id" {
   default = ""
 }
 
-variable "auto_discover" {
+variable "auto_discover_enabled" {
   type = bool
   default = true
 }
