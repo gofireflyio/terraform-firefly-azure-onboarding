@@ -3,7 +3,6 @@ variable "firefly_endpoint" {
   default = "https://prodapi.firefly.ai/api"
 }
 
-
 variable "firefly_webhook_url" {
   type    = string
   default = "https://azure-events.firefly.ai"
