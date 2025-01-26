@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "current" {
-  count    = var.eventdriven_enabled && var.existing_resource_group_name == "" ? 1 : 0
+  count    = var.existing_resource_group_name == "" ? 1 : 0
   provider = azurerm.deployment_subscription
   location = var.location
   name     = "${module.naming.resource_group.name}-${var.prefix}firefly${var.suffix}"
@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "current" {
 }
 
 resource "azurerm_storage_account" "current" {
-  count                            = var.eventdriven_enabled && var.existing_storage_account_id == "" ? 1 : 0
+  count                            = var.existing_storage_account_id == "" ? 1 : 0
   provider                         = azurerm.deployment_subscription
   account_replication_type         = "LRS"
   cross_tenant_replication_enabled = false
@@ -26,7 +26,7 @@ resource "azurerm_storage_account" "current" {
 }
 
 resource "azurerm_eventgrid_system_topic" "current" {
-  count                  = var.eventdriven_enabled && var.existing_eventgrid_topic_name == "" ? 1 : 0
+  count                  = var.existing_eventgrid_topic_name == "" ? 1 : 0
   provider               = azurerm.deployment_subscription
   name                   = "${module.naming.eventgrid_topic.name}-${var.prefix}firefly${var.suffix}"
   location               = var.location
@@ -37,7 +37,7 @@ resource "azurerm_eventgrid_system_topic" "current" {
 }
 
 resource "azurerm_eventgrid_system_topic_event_subscription" "current" {
-  count                = var.eventdriven_enabled && var.existing_eventgrid_topic_name == "" ? 1 : 0
+  count                = var.existing_eventgrid_topic_name == "" ? 1 : 0
   provider             = azurerm.deployment_subscription
   name                 = "${module.naming.eventgrid_event_subscription.name}-${var.prefix}firefly${var.suffix}"
   resource_group_name  = local.resource_group_name
@@ -56,7 +56,6 @@ resource "azurerm_eventgrid_system_topic_event_subscription" "current" {
 }
 
 resource "azurerm_role_definition" "FireflyStorageAccountBlobReader" {
-  count    = var.eventdriven_enabled ? 1 : 0
   provider = azurerm.deployment_subscription
 
   name        = "${module.naming.role_definition.name}-${var.prefix}FireflyStorageAccountBlobReader-${var.subscription_id}${var.suffix}"
@@ -74,7 +73,6 @@ resource "azurerm_role_definition" "FireflyStorageAccountBlobReader" {
 }
 
 resource "azurerm_role_assignment" "FireflyStorageAccountBlobReader" {
-  count    = var.eventdriven_enabled ? 1 : 0
   provider = azurerm.deployment_subscription
 
   principal_id         = azuread_service_principal.current.id
@@ -100,7 +98,7 @@ EOT
 }
 
 resource "azurerm_monitor_diagnostic_setting" "current" {
-  for_each           = var.eventdriven_enabled ? local.kv_filtered_subscriptions : {}
+  for_each           = local.kv_filtered_subscriptions
   provider           = azurerm.deployment_subscription
   name               = "${module.naming.monitor_diagnostic_setting.name}-${var.prefix}firefly${each.key}${var.suffix}"
   target_resource_id = "/subscriptions/${each.key}"

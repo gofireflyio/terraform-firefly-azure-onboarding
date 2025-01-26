@@ -1,6 +1,6 @@
 locals {
   filtered_subscriptions    = [for subscription in data.azurerm_subscriptions.current.subscriptions : subscription if !contains(keys(subscription.tags), "disable_firefly_discovery") && subscription.state == "Enabled"]
-  kv_filtered_subscriptions = var.eventdriven_auto_discover && length(local.filtered_subscriptions) > 0 ? { for subscription in local.filtered_subscriptions : subscription.subscription_id => subscription.display_name } : { "${var.subscription_id}" = data.azurerm_subscription.current.display_name }
+  kv_filtered_subscriptions = var.auto_discover_enabled && length(local.filtered_subscriptions) > 0 ? { for subscription in local.filtered_subscriptions : subscription.subscription_id => subscription.display_name } : { "${var.subscription_id}" = data.azurerm_subscription.current.display_name }
 
   resource_group_id   = var.existing_resource_group_name != "" ? var.existing_resource_group_name : azurerm_resource_group.current[0].id
   resource_group_name = var.existing_resource_group_name != "" ? var.existing_resource_group_name : azurerm_resource_group.current[0].name
@@ -8,7 +8,7 @@ locals {
 
 
   eventgrid_system_topic_name = var.existing_eventgrid_topic_name != "" ? var.existing_eventgrid_topic_name : azurerm_eventgrid_system_topic.current[0].name
-  subscription_suffix         = var.eventdriven_auto_discover ? "" : "-${var.subscription_id}"
+  subscription_suffix         = var.auto_discover_enabled ? "" : "-${var.subscription_id}"
   tags = merge(var.tags, {
     "firefly" = "true"
   })
