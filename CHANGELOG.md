@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/compare/v1.2.0...v1.3.0) (2025-01-26)
+
+
+### Features
+
+* v1.3.0 ([6523f51](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/commit/6523f51553c6cac412a98e4d71f08405cff14dd0))
+
 ## [1.2.0](https://github.com/gofireflyio/terraform-firefly-azure-onboarding/compare/v1.1.0...v1.2.0) (2024-11-14)
 
 
