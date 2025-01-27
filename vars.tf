@@ -94,6 +94,11 @@ variable "auto_discover_enabled" {
   default = true
 }
 
+variable "is_prod" {
+  type = bool
+  default = false
+}
+
 variable "client_id" {
   type = string
 }
