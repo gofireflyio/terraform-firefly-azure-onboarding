@@ -167,8 +167,6 @@ module "firefly_azure" {
     azurerm.deployment_subscription = azurerm.deployment_subscription
   }
   
-  client_id       = var.client_id
-  client_secret   = var.client_secret
   directory_domain = "your-organization.com"
   tenant_id       = var.tenant_id
   subscription_id = var.subscription_id
