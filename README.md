@@ -55,6 +55,8 @@ Choose one of the following installation options based on your needs:
 ### Option 1: Discovered Subscriptions
 
 Use this option if you want Firefly to automatically discover and monitor all accessible Azure subscriptions.
+We use delegated AD service principal to discover and monitor all accessible Azure subscriptions.
+Go to Option 3 if you want to use non delegated AD service principal.
 
 You can exclude subscriptions by adding a tag on them.
 
@@ -139,6 +141,49 @@ module "firefly_azure_subscription_2" {
   existing_resource_group_name = module.firefly_azure_subscription_1.firefly_resource_group_name
   existing_storage_account_id = module.firefly_azure_subscription_1.firefly_storage_account_id
   existing_eventgrid_topic_name = module.firefly_azure_subscription_1.firefly_eventgrid_system_topic_name
+}
+```
+
+### Option 3: Non delegated AD service principal
+
+```hcl
+provider "azuread" {
+  client_id     = var.client_id
+  client_secret = var.client_secret
+  tenant_id     = var.tenant_id
+}
+
+provider "azurerm" {
+  features {}
+  alias                           = "deployment_subscription"
+  tenant_id                       = var.tenant_id
+  subscription_id                 = var.subscription_id
+  resource_provider_registrations = "none"
+}
+
+module "firefly_azure" {
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.3.0/modules/single_integration"
+  providers = {
+    azurerm.deployment_subscription = azurerm.deployment_subscription
+  }
+  
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  directory_domain = "your-organization.com"
+  tenant_id       = var.tenant_id
+  subscription_id = var.subscription_id
+  
+  firefly_access_key = var.firefly_access_key
+  firefly_secret_key = var.firefly_secret_key
+  
+  location = var.location
+  prefix   = var.prefix
+  tags     = var.tags
+  // existing_app_id = "00000000-0000-0000-0000-000000000000"
+  // existing_service_principal_id = "00000000-0000-0000-0000-000000000000"
+  
+  
+  create_resource_provider_registration = false
 }
 ```
 
