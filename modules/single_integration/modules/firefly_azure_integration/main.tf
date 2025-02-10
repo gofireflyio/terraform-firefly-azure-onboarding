@@ -12,7 +12,7 @@ data "http" "firefly_azure_integration_request" {
   }
   request_body = jsonencode(
     {
-      "name"                       = var.subscription_name,
+      "name"                       = var.subscription_id,
       "subscriptionId"             = var.subscription_id,
       "tenantId"                   = var.tenant_id,
       "applicationId"              = var.application_id,

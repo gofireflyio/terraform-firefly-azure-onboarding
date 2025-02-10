@@ -1,6 +1,7 @@
 variable "subscription_name" {
   type        = string
   description = "subscription_name"
+  default = ""
 }
 
 variable "firefly_token" {

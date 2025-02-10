@@ -96,6 +96,7 @@ variable "subscription_id" {
 
 variable "subscription_name" {
   type = string
+  default = ""
 }
 
 variable "is_prod" {
