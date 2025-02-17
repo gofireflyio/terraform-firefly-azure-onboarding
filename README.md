@@ -13,6 +13,7 @@ This repository contains Terraform modules for integrating Firefly with Azure su
   - [Installation](#installation)
     - [Option 1: Discovered Subscriptions](#option-1-discovered-subscriptions)
     - [Option 2: Single/Selected Subscription](#option-2-singleselected-subscription)
+    - [Option 3: Single/Selected Subscription](#option-3-non-delegated-ad-service-principal)
   - [Required Resources](#required-resources)
   - [Configuration Variables](#configuration-variables)
   - [Contributing](#contributing)
