@@ -12,8 +12,7 @@ This repository contains Terraform modules for integrating Firefly with Azure su
   - [Required Providers](#required-providers)
   - [Installation](#installation)
     - [Option 1: Discovered Subscriptions](#option-1-discovered-subscriptions)
-    - [Option 2: Single/Selected Subscription](#option-2-singleselected-subscription)
-    - [Option 3: Single/Selected Subscription](#option-3-non-delegated-ad-service-principal)
+    - [Option 2: Single - Non AD Delegated Subscription](#option-2-non-delegated-ad-service-principal)
   - [Required Resources](#required-resources)
   - [Configuration Variables](#configuration-variables)
   - [Contributing](#contributing)
@@ -37,7 +36,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "4.3.0"
+      version = "4.19.0"
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -81,16 +80,15 @@ provider "azurerm" {
 }
 
 module "firefly_azure" {
-  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.2.0"
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.5.0"
   providers = {
     azurerm.deployment_subscription = azurerm.deployment_subscription
   }
   
-  client_id       = var.client_id
-  client_secret   = var.client_secret
-  directory_domain = "your-organization.com"
-  tenant_id       = var.tenant_id
-  subscription_id = var.subscription_id
+  directory_domain      = "your-organization.com"
+  tenant_id             = var.tenant_id
+  management_group_name = var.management_group_name
+  subscription_id       = var.subscription_id
   
   firefly_access_key = var.firefly_access_key
   firefly_secret_key = var.firefly_secret_key
@@ -100,52 +98,10 @@ module "firefly_azure" {
   tags     = var.tags
   
   create_resource_provider_registration = false
-  eventdriven_auto_discover = true
-  eventdriven_enabled = true
-  trigger_integrations = false
 }
 ```
 
-### Option 2: Single/Selected Subscription
-
-Use this option if you want to integrate Firefly with specific Azure subscriptions. You'll need to create a separate module for each subscription.
-
-```hcl
-module "firefly_azure_subscription_1" {
-  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.2.0"
-  
-  client_id       = var.client_id
-  client_secret   = var.client_secret
-  directory_domain = "your-organization.com"
-  tenant_id       = var.tenant_id
-  subscription_id = "subscription-id-1"
-  
-  firefly_access_key = var.firefly_access_key
-  firefly_secret_key = var.firefly_secret_key
-  
-  location = var.location
-  prefix   = var.prefix
-  tags     = var.tags
-  
-  create_resource_provider_registration = false
-  eventdriven_auto_discover = false
-  eventdriven_enabled = true
-  trigger_integrations = false
-}
-
-# For additional subscriptions, create new modules and reference existing resources
-module "firefly_azure_subscription_2" {
-  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.2.0"
-  
-  # ... (similar configuration as above)
-  
-  existing_resource_group_name = module.firefly_azure_subscription_1.firefly_resource_group_name
-  existing_storage_account_id = module.firefly_azure_subscription_1.firefly_storage_account_id
-  existing_eventgrid_topic_name = module.firefly_azure_subscription_1.firefly_eventgrid_system_topic_name
-}
-```
-
-### Option 3: Non delegated AD service principal
+### Option 2: Non delegated AD service principal
 
 ```hcl
 provider "azuread" {
@@ -163,7 +119,7 @@ provider "azurerm" {
 }
 
 module "firefly_azure" {
-  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.4.0/modules/single_integration"
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.5.0/modules/single_integration"
   providers = {
     azurerm.deployment_subscription = azurerm.deployment_subscription
   }

@@ -84,7 +84,7 @@ variable "subscription_id" {
   type = string
 }
 
-variable "management_group_id" {
+variable "management_group_name" {
   type    = string
   default = ""
 }
@@ -97,14 +97,6 @@ variable "auto_discover_enabled" {
 variable "is_prod" {
   type = bool
   default = false
-}
-
-variable "client_id" {
-  type = string
-}
-
-variable "client_secret" {
-  type = string
 }
 
 variable "enforce_storage_network_rules" {

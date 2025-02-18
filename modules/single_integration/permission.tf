@@ -14,43 +14,35 @@ resource "azuread_service_principal" "current" {
 }
 
 resource "azuread_service_principal_password" "current" {
-  #service_principal_id = local.service_principle_client_id
   service_principal_id = local.service_principle_object_id
 }
 
 resource "azurerm_role_assignment" "BillingReader" {
   principal_id         = local.service_principle_object_id
-  provider             = azurerm.deployment_subscription
   role_definition_name = "Billing Reader"
   scope                = local.scope
 }
 
 resource "azurerm_role_assignment" "Reader" {
   principal_id         = local.service_principle_object_id
-  provider             = azurerm.deployment_subscription
   role_definition_name = "Reader"
   scope                = local.scope
 }
 
 resource "azurerm_role_assignment" "AppConfigurationDataReader" {
   principal_id = local.service_principle_object_id
-  provider     = azurerm.deployment_subscription
-
   role_definition_name = "App Configuration Data Reader"
   scope                = local.scope
 }
 
 resource "azurerm_role_assignment" "SecurityReader" {
   principal_id = local.service_principle_object_id
-  provider     = azurerm.deployment_subscription
-
   role_definition_name = "Security Reader"
   scope                = local.scope
 }
 
 resource "azurerm_role_definition" "Firefly" {
   name        = "${module.naming.role_definition.name}-${var.prefix}Firefly${var.suffix}"
-  provider    = azurerm.deployment_subscription
   scope       = local.scope
   description = "Firefly's requested permissions"
 
@@ -77,8 +69,6 @@ resource "azurerm_role_definition" "Firefly" {
 
 resource "azurerm_role_assignment" "Firefly" {
   principal_id = local.service_principle_object_id
-  provider     = azurerm.deployment_subscription
-
   role_definition_name = azurerm_role_definition.Firefly.name
   scope                = local.scope
 }
