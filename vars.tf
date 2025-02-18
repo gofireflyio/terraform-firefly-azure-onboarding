@@ -99,14 +99,6 @@ variable "is_prod" {
   default = false
 }
 
-variable "client_id" {
-  type = string
-}
-
-variable "client_secret" {
-  type = string
-}
-
 variable "enforce_storage_network_rules" {
   type    = bool
   default = false
