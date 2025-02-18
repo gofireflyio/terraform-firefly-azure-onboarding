@@ -1,5 +1,5 @@
 data "azurerm_management_group" "current" {
-  display_name = var.management_group_id
+  display_name = var.management_group_name
 }
 
 data "azurerm_subscriptions" "current" {}

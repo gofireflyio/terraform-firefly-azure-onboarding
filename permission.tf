@@ -1,5 +1,5 @@
 locals {
-  management_group_id = var.management_group_id != "" ? "/providers/Microsoft.Management/managementGroups/${var.management_group_id}" : data.azurerm_management_group.current.id
+  management_group_id = data.azurerm_management_group.current.id
   scope               = var.auto_discover_enabled != "" ? local.management_group_id : "/subscriptions/${var.subscription_id}"
 }
 
