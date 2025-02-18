@@ -72,8 +72,10 @@ provider "azuread" {
 provider "azurerm" {
   features {}
   alias                           = "deployment_subscription"
+  // optional: can remove to use local az login session
   client_id                       = var.client_id
   client_secret                   = var.client_secret
+  // optional: end
   tenant_id                       = var.tenant_id
   subscription_id                 = var.subscription_id
   resource_provider_registrations = "none"
@@ -113,6 +115,10 @@ provider "azuread" {
 provider "azurerm" {
   features {}
   alias                           = "deployment_subscription"
+  // optional: can remove to use local az login session
+  client_id                       = var.client_id
+  client_secret                   = var.client_secret
+  // optional: end
   tenant_id                       = var.tenant_id
   subscription_id                 = var.subscription_id
   resource_provider_registrations = "none"
