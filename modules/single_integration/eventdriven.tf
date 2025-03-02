@@ -68,7 +68,7 @@ resource "azurerm_role_definition" "FireflyStorageAccountBlobReader" {
 
 resource "azurerm_role_assignment" "FireflyStorageAccountBlobReader" {
   principal_id         = local.service_principle_object_id
-  role_definition_name = azurerm_role_definition.FireflyStorageAccountBlobReader.name
+  role_definition_id = azurerm_role_definition.FireflyStorageAccountBlobReader.role_definition_resource_id
   scope                = "/subscriptions/${var.subscription_id}"
   condition_version    = "2.0"
   condition            = <<-EOT

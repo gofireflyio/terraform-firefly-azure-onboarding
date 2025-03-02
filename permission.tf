@@ -68,7 +68,7 @@ resource "azurerm_role_definition" "Firefly" {
 
 resource "azurerm_role_assignment" "Firefly" {
   principal_id = azuread_service_principal.current.object_id
-  role_definition_name = azurerm_role_definition.Firefly.name
+  role_definition_id = azurerm_role_definition.Firefly.role_definition_resource_id
   scope                = local.scope
 }
 
