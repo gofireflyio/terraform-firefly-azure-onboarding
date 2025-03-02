@@ -75,13 +75,10 @@ resource "azurerm_role_definition" "Firefly" {
   assignable_scopes = [
     local.scope
   ]
-  depends_on = [azuread_service_principal.current]
 }
 
 resource "azurerm_role_assignment" "Firefly" {
   principal_id         = local.service_principle_object_id
   role_definition_name = azurerm_role_definition.Firefly.name
   scope                = local.scope
-
-  depends_on = [azuread_service_principal.current]
 }
