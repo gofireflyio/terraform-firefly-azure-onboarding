@@ -11,7 +11,7 @@ resource "azurerm_storage_account" "current" {
   cross_tenant_replication_enabled = false
   account_tier                     = "Standard"
   location                         = var.location
-  name                             = "${module.naming.storage_account.name}${var.prefix != "" ? regex("\\w+", var.prefix) : ""}firefly${var.suffix != "" ? regex("\\w+", var.suffix) : ""}"
+  name                             = "${module.naming.storage_account.name}${var.prefix}firefly${var.suffix}"
   resource_group_name              = local.resource_group_name
   tags                             = local.tags
   dynamic "network_rules" {

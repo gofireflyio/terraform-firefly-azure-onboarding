@@ -16,7 +16,6 @@ resource "azuread_service_principal" "current" {
 resource "azuread_service_principal_password" "current" {
   service_principal_id = local.service_principle_object_id
 
-  depends_on = [azuread_service_principal.current]
 }
 
 resource "azurerm_role_assignment" "BillingReader" {
@@ -24,7 +23,6 @@ resource "azurerm_role_assignment" "BillingReader" {
   role_definition_name = "Billing Reader"
   scope                = local.scope
 
-  depends_on = [azuread_service_principal.current]
 }
 
 resource "azurerm_role_assignment" "Reader" {
@@ -32,7 +30,6 @@ resource "azurerm_role_assignment" "Reader" {
   role_definition_name = "Reader"
   scope                = local.scope
 
-  depends_on = [azuread_service_principal.current]
 }
 
 resource "azurerm_role_assignment" "AppConfigurationDataReader" {
@@ -40,7 +37,6 @@ resource "azurerm_role_assignment" "AppConfigurationDataReader" {
   role_definition_name = "App Configuration Data Reader"
   scope                = local.scope
 
-  depends_on = [azuread_service_principal.current]
 }
 
 resource "azurerm_role_assignment" "SecurityReader" {
@@ -48,7 +44,6 @@ resource "azurerm_role_assignment" "SecurityReader" {
   role_definition_name = "Security Reader"
   scope                = local.scope
 
-  depends_on = [azuread_service_principal.current]
 }
 
 resource "azurerm_role_definition" "Firefly" {
