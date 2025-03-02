@@ -64,6 +64,7 @@ resource "azurerm_role_definition" "FireflyStorageAccountBlobReader" {
   assignable_scopes = [
     "/subscriptions/${var.subscription_id}"
   ]
+  depends_on = [azurerm_storage_account.local]
 }
 
 resource "azurerm_role_assignment" "FireflyStorageAccountBlobReader" {
@@ -71,6 +72,7 @@ resource "azurerm_role_assignment" "FireflyStorageAccountBlobReader" {
   role_definition_name = azurerm_role_definition.FireflyStorageAccountBlobReader.name
   scope                = "/subscriptions/${var.subscription_id}"
   condition_version    = "2.0"
+  depends_on = [azurerm_storage_account.local]
   condition            = <<-EOT
 (
 	(

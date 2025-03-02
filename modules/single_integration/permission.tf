@@ -1,5 +1,5 @@
 locals {
-  scope               = "/subscriptions/${var.subscription_id}"
+  scope = "/subscriptions/${var.subscription_id}"
 }
 
 resource "azuread_application_registration" "current" {
@@ -15,30 +15,40 @@ resource "azuread_service_principal" "current" {
 
 resource "azuread_service_principal_password" "current" {
   service_principal_id = local.service_principle_object_id
+
+  depends_on = [azuread_service_principal.current]
 }
 
 resource "azurerm_role_assignment" "BillingReader" {
   principal_id         = local.service_principle_object_id
   role_definition_name = "Billing Reader"
   scope                = local.scope
+
+  depends_on = [azuread_service_principal.current]
 }
 
 resource "azurerm_role_assignment" "Reader" {
   principal_id         = local.service_principle_object_id
   role_definition_name = "Reader"
   scope                = local.scope
+
+  depends_on = [azuread_service_principal.current]
 }
 
 resource "azurerm_role_assignment" "AppConfigurationDataReader" {
-  principal_id = local.service_principle_object_id
+  principal_id         = local.service_principle_object_id
   role_definition_name = "App Configuration Data Reader"
   scope                = local.scope
+
+  depends_on = [azuread_service_principal.current]
 }
 
 resource "azurerm_role_assignment" "SecurityReader" {
-  principal_id = local.service_principle_object_id
+  principal_id         = local.service_principle_object_id
   role_definition_name = "Security Reader"
   scope                = local.scope
+
+  depends_on = [azuread_service_principal.current]
 }
 
 resource "azurerm_role_definition" "Firefly" {
@@ -68,7 +78,9 @@ resource "azurerm_role_definition" "Firefly" {
 }
 
 resource "azurerm_role_assignment" "Firefly" {
-  principal_id = local.service_principle_object_id
+  principal_id         = local.service_principle_object_id
   role_definition_name = azurerm_role_definition.Firefly.name
   scope                = local.scope
+
+  depends_on = [azuread_service_principal.current]
 }
