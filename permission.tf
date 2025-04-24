@@ -60,6 +60,9 @@ resource "azurerm_role_definition" "Firefly" {
       "Microsoft.Authorization/roleAssignments/read",
       "Microsoft.OperationalInsights/workspaces/sharedkeys/action"
     ]
+    data_actions =  [
+      "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read"
+    ]
   }
   assignable_scopes = [
     local.scope
@@ -70,6 +73,23 @@ resource "azurerm_role_assignment" "Firefly" {
   principal_id = azuread_service_principal.current.object_id
   role_definition_name = azurerm_role_definition.Firefly.name
   scope                = local.scope
+  condition_version    = "2.0"
+  condition            = <<-EOT
+  (
+	(
+		!(ActionMatches{'Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read'} AND NOT
+	SubOperationMatches{'Blob.List'})
+	)
+OR
+	(
+		@Resource[Microsoft.Storage/storageAccounts/blobServices/containers/blobs:path] StringLike '*state'
+	)
+OR
+	(
+		@Resource[Microsoft.Storage/storageAccounts/blobServices/containers/blobs:path] StringLike '*.tfstateenv:*'
+	)
+)
+EOT
 }
 
 resource "azuread_service_principal_delegated_permission_grant" "current" {
