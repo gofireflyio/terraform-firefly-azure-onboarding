@@ -69,24 +69,7 @@ resource "azurerm_role_definition" "FireflyStorageAccountBlobReader" {
 resource "azurerm_role_assignment" "FireflyStorageAccountBlobReader" {
   principal_id         = azuread_service_principal.current.id
   role_definition_name = azurerm_role_definition.FireflyStorageAccountBlobReader.name
-  scope                = "/subscriptions/${var.subscription_id}"
-  condition_version    = "2.0"
-  condition            = <<-EOT
-(
-	(
-		!(ActionMatches{'Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read'} AND NOT
-	SubOperationMatches{'Blob.List'})
-	)
-OR
-	(
-		@Resource[Microsoft.Storage/storageAccounts/blobServices/containers/blobs:path] StringLike '*state'
-	)
-OR
-	(
-		@Resource[Microsoft.Storage/storageAccounts/blobServices/containers/blobs:path] StringLike '*.tfstateenv:*'
-	)
-)
-EOT
+  scope                = local.storage_account_id
 }
 
 resource "azurerm_monitor_diagnostic_setting" "current" {
