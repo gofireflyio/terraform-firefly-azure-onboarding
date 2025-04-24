@@ -60,9 +60,6 @@ resource "azurerm_role_definition" "Firefly" {
       "Microsoft.Authorization/roleAssignments/read",
       "Microsoft.OperationalInsights/workspaces/sharedkeys/action"
     ]
-    data_actions =  [
-      "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read"
-    ]
   }
   assignable_scopes = [
     local.scope
@@ -72,6 +69,16 @@ resource "azurerm_role_definition" "Firefly" {
 resource "azurerm_role_assignment" "Firefly" {
   principal_id = azuread_service_principal.current.object_id
   role_definition_name = azurerm_role_definition.Firefly.name
+  scope                = local.scope
+}
+
+data "azurerm_role_definition" "StorageBlobDataReader" {
+  name = "Storage Blob Data Reader"
+}
+
+resource "azurerm_role_assignment" "Firefly-BlobReader-StateFiles" {
+  principal_id = azuread_service_principal.current.object_id
+  role_definition_name = data.azurerm_role_definition.StorageBlobDataReader.name
   scope                = local.scope
   condition_version    = "2.0"
   condition            = <<-EOT

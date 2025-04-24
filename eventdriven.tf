@@ -62,14 +62,14 @@ resource "azurerm_role_definition" "FireflyStorageAccountBlobReader" {
     ]
   }
   assignable_scopes = [
-    azurerm_storage_account.current.id
+    "/subscriptions/${var.subscription_id}"
   ]
 }
 
 resource "azurerm_role_assignment" "FireflyStorageAccountBlobReader" {
   principal_id         = azuread_service_principal.current.id
   role_definition_name = azurerm_role_definition.FireflyStorageAccountBlobReader.name
-  scope                = "/subscriptions/${var.subscription_id}"
+  scope                = local.storage_account_id
 }
 
 resource "azurerm_monitor_diagnostic_setting" "current" {
