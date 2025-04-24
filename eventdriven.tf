@@ -53,7 +53,7 @@ resource "azurerm_eventgrid_system_topic_event_subscription" "current" {
 
 resource "azurerm_role_definition" "FireflyStorageAccountBlobReader" {
   name        = "${module.naming.role_definition.name}-${var.prefix}FireflyStorageAccountBlobReader-${var.subscription_id}${var.suffix}"
-  scope       = azurerm_storage_account.current.id
+  scope       = "/subscriptions/${var.subscription_id}"
   description = "Firefly's requested permissions"
 
   permissions {
