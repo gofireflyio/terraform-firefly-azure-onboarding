@@ -78,7 +78,7 @@ data "azurerm_role_definition" "StorageBlobDataReader" {
 }
 
 resource "azurerm_role_assignment" "Firefly-BlobReader-StateFiles" {
-  principal_id = azuread_service_principal.current.object_id
+  principal_id = local.service_principle_object_id
   role_definition_name = data.azurerm_role_definition.StorageBlobDataReader.name
   scope                = local.scope
   condition_version    = "2.0"
