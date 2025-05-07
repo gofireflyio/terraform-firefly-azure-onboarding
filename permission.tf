@@ -79,7 +79,7 @@ data "azurerm_role_definition" "StorageBlobDataReader" {
 resource "azurerm_role_assignment" "Firefly-BlobReader-StateFiles" {
   principal_id = azuread_service_principal.current.object_id
   role_definition_name = data.azurerm_role_definition.StorageBlobDataReader.name
-  scope                = local.scope
+  scope                = "/subscriptions/${var.subscription_id}"
   condition_version    = "2.0"
   condition            = <<-EOT
   (
