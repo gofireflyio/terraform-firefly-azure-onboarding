@@ -1,5 +1,5 @@
 data "http" "firefly_azure_integration_request" {
-  url    = "${var.firefly_endpoint}/integrations/azure/"
+  url    = "${var.firefly_endpoint}/integrations/azure?onConflictUpdate=true"
   method = "POST"
   request_headers = {
     Content-Type  = "application/json"
