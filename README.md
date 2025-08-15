@@ -82,7 +82,7 @@ provider "azurerm" {
 }
 
 module "firefly_azure" {
-  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.5.0"
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.6.0"
   providers = {
     azurerm.deployment_subscription = azurerm.deployment_subscription
   }
@@ -125,7 +125,7 @@ provider "azurerm" {
 }
 
 module "firefly_azure" {
-  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.5.0/modules/single_integration"
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.6.0/modules/single_integration"
   providers = {
     azurerm.deployment_subscription = azurerm.deployment_subscription
   }
