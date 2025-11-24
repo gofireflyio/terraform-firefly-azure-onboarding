@@ -19,7 +19,7 @@ module "firefly_integrate" {
   source                      = "./modules/firefly_azure_integration"
   firefly_token               = local.token
   subscription_id             = var.subscription_id
-  subscription_name           = var.subscription_id
+  subscription_name           = var.subscription_name
   tenant_id                   = var.tenant_id
   application_id              = local.service_principle_client_id
   client_secret               = azuread_service_principal_password.current.value
