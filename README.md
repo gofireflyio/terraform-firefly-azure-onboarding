@@ -164,6 +164,51 @@ The Terraform module will create the following Azure resources:
 - Azure Role Definition
 - Azure Storage Account
 
+## Required Permissions
+
+The identity running Terraform must have permissions at **both the Azure AD tenant level** and the **Azure subscription (or management group) level**.
+
+---
+
+### Azure AD Permissions
+
+Required for creating and configuring Azure AD identities:
+
+| Permission | Purpose |
+|----------|--------|
+| `Application.ReadWrite.All` | Create and manage Azure AD applications |
+| `Application.ReadWrite.OwnedBy` | Alternative to full application write access |
+| `AppRoleAssignment.ReadWrite.All` | Grant delegated permissions |
+| `Directory.Read.All` | Read directory objects |
+
+---
+
+### Azure Subscription Permissions
+
+Required at the **subscription or management group scope**:
+
+| Resource | Required Permission |
+|--------|---------------------|
+| Resource Groups | `Microsoft.Resources/subscriptions/resourceGroups/*` |
+| Role Assignments | `Microsoft.Authorization/roleAssignments/*` |
+| Custom Roles | `Microsoft.Authorization/roleDefinitions/*` |
+| Event Grid System Topics | `Microsoft.EventGrid/systemTopics/*` |
+| Event Grid Subscriptions | `Microsoft.EventGrid/eventSubscriptions/*` |
+| Diagnostic Settings | `Microsoft.Insights/diagnosticSettings/*` |
+| Storage Accounts | `Microsoft.Storage/storageAccounts/*` |
+| Blob Containers | `Microsoft.Storage/storageAccounts/blobServices/containers/*` |
+| Provider Registration | `Microsoft.Resources/providers/register/action` |
+
+---
+
+### Recommended Roles
+
+One of the following roles is required:
+
+- **Owner**
+- **User Access Administrator** (with resource creation permissions)
+
+
 ## Configuration Variables
 
 Service principal credential used must have permissions to create a service principal, assign permission to an application and create resources on the subscription that is added to Firefly. 
