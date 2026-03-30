@@ -52,12 +52,12 @@ variable "suffix" {
 }
 
 variable "existing_service_principal_id" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "existing_app_id" {
-  type = string
+  type    = string
   default = ""
 }
 
@@ -95,12 +95,12 @@ variable "subscription_id" {
 }
 
 variable "subscription_name" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "is_prod" {
-  type = bool
+  type    = bool
   default = false
 }
 
@@ -114,8 +114,16 @@ variable "firefly_eips" {
   default = [
     "3.224.145.192",
     "54.83.245.177",
-    "3.213.167.195",
+    "34.226.97.113",
     "54.146.252.237",
-    "34.226.97.113"
+    "3.213.167.195",
+    "54.166.221.160",
+    "52.22.128.83",
+    "52.86.171.233",
+    "34.200.154.87",
+    "100.25.162.125",
+    "18.209.82.232",
+    "98.83.246.85",
+    "54.144.58.153"
   ]
 }
