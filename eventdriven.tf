@@ -18,6 +18,7 @@ resource "azurerm_storage_account" "current" {
     for_each = var.enforce_storage_network_rules ? [1] : []
     content {
       default_action = "Deny"
+      bypass         = ["AzureServices"]
       ip_rules       = var.firefly_eips
     }
   }
