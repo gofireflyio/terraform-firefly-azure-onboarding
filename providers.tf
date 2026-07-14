@@ -2,12 +2,12 @@ terraform {
   required_providers {
     azurerm = {
       source                = "hashicorp/azurerm"
-      version               = "4.19.0"
+      version               = "~> 4.19"
       configuration_aliases = [azurerm.deployment_subscription]
     }
     azuread = {
       source  = "hashicorp/azuread"
-      version = "2.53.1"
+      version = "~> 2.53"
     }
   }
 }
