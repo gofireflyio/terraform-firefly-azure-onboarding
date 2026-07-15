@@ -36,7 +36,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "4.19.0"
+      version = "4.28.0"
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -82,7 +82,7 @@ provider "azurerm" {
 }
 
 module "firefly_azure" {
-  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.6.2"
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.6.3"
   providers = {
     azurerm.deployment_subscription = azurerm.deployment_subscription
   }
@@ -125,7 +125,7 @@ provider "azurerm" {
 }
 
 module "firefly_azure" {
-  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.6.2/modules/single_integration"
+  source  = "github.com/gofireflyio/terraform-firefly-azure-onboarding?ref=v1.6.3/modules/single_integration"
   providers = {
     azurerm.deployment_subscription = azurerm.deployment_subscription
   }
