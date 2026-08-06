@@ -13,7 +13,7 @@ resource "azuread_service_principal" "current" {
 }
 
 resource "azuread_service_principal_password" "current" {
-  service_principal_id = azuread_service_principal.current.object_id
+  service_principal_id = "/servicePrincipals/${azuread_service_principal.current.object_id}"
 }
 
 resource "azurerm_role_assignment" "BillingReader" {
